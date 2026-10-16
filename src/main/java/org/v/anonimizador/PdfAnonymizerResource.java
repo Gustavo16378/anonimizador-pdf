@@ -3,11 +3,14 @@ package org.v.anonimizador;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.jboss.logging.Logger;
 
 import java.io.*;
 
 @Path("/anonimizador")
 public class PdfAnonymizerResource {
+
+    private static final Logger LOG = Logger.getLogger(PdfAnonymizerResource.class);
 
     @POST
     @Path("/redact")
@@ -21,7 +24,7 @@ public class PdfAnonymizerResource {
                     .header("Content-Disposition", "attachment; filename=\"anonimizado.pdf\"")
                     .build();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Falha ao anonimizar o PDF", e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Erro ao anonimizar: " + e.getMessage())
                     .build();
